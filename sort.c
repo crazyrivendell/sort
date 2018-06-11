@@ -1,15 +1,56 @@
 #include <stdio.h>
-void print(int a[], int n){
+#include <stdlib.h>
+#include <time.h>
+#include <sys/time.h>
+#include <unistd.h>
+
+
+#define RANGE 10000   //数组的元素大小从1到RAGNE
+
+
+void Display(int a[], int n){
+    #if 0
     for(int j= 0; j<n; j++){
         printf("%d ",a[j]);
     }
     printf("\n");
+    #endif
 }
-void swap(int *a, int *b)
+
+void Swap(int *a, int *b)
 {
     int tmp = *a;
     *a = *b;
     *b = tmp;
+}
+
+
+long GetCurrentTime(int type){
+    struct timeval tv;
+    gettimeofday(&tv,NULL);
+    if(type == 0){ //秒
+        //printf("second:%ld\n",tv.tv_sec);
+        return tv.tv_sec;
+    }
+    else if (type == 1){  //毫秒
+        //printf("millisecond:%ld\n",tv.tv_sec*1000 + tv.tv_usec/1000);
+        return tv.tv_sec*1000 + tv.tv_usec/1000;
+    }
+    else{  //微秒
+        //printf("microsecond:%ld\n",tv.tv_sec*1000000 + tv.tv_usec);
+        return tv.tv_sec*1000000 + tv.tv_usec;
+    }
+}
+
+void ProduceRandArray (int A[], int n)
+{
+    srand((unsigned) time(NULL)); //用时间做种，每次产生随机数不一样
+
+    for (int i = 0; i < n; i ++)
+    {
+        A[i] = rand() % RANGE + 1;  //产生随机数
+    }
+
 }
 
 /*插入排序(Insertion Sort) 1
@@ -20,18 +61,17 @@ void swap(int *a, int *b)
 */
 void StraightInsertSort(int A[], int n)
 {
+    int i,j,k;
     if (n < 2) return;
-    for(int i= 1; i<n; i++){
-        if(A[i] < A[i-1]){     //若第i个元素大于i-1元素，直接插入。小于的话，移动有序表后插入
-            int j= i-1;
-            int x = A[i];      //复制为哨兵，即存储待排序元素
-            A[i] = A[i-1];     //先后移一个元素
-            while(x < A[j]){   //查找在有序表的插入位置
-                A[j+1] = A[j];
-                j--;           //元素后移
-            }
-            A[j+1] = x;        //插入到正确位置
+    for(i= 1; i<n; i++){
+        k = A[i];
+        j = i - 1;
+        while ((j >= 0) && (k < A[j]))  //若第i个元素大于i-1元素，直接插入。小于的话，移动有序表后插入
+        {
+            A[j + 1] = A[j];
+            --j; //元素后移
         }
+        A[j + 1] = k; //插入到正确位置
     }
 }
 
@@ -45,22 +85,28 @@ void StraightInsertSort(int A[], int n)
 * 每趟排序，根据对应的增量ti，将待排序列分割成若干长度为m的子序列，分别对各子表进行直接插入排序。仅增量因子为1时，整个序列作为一个表来处理，表长度即为整个序列的长度。
 */
 void ShellSort(int A[], int n){
-    if (n < 2) return;
+    int i, j, tmp;
     int dk = n/2;
-    while( dk >= 1  ){
-        for(int i= dk; i<n; ++i){
-            if(A[i] < A[i-dk]){          //若第i个元素大于i-dk元素，直接插入。小于的话，移动有序表后插入
-                int j = i-dk;
-                int x = A[i];           //复制为哨兵，即存储待排序元素
-                A[i] = A[i-dk];         //首先后移一个元素
-                while(x < A[j]){     //查找在有序表的插入位置
-                    A[j+dk] = A[j];
-                    j -= dk;             //元素后移
-                }
-                A[j+dk] = x;            //插入到正确位置
-            }
+    if (n < 2) return;
+    while (dk > 0)
+    {
+        for (i=0; i < n; i++)
+        {
+          j = i;
+          tmp = A[i];
+          while ((j >= dk) && (A[j-dk] > tmp))
+          {
+            A[j] = A[j - dk];
+            j = j - dk;
+          }
+          A[j] = tmp;
         }
-        dk = dk/2;
+        if (dk/2 != 0)
+          dk = dk/2;
+        else if (dk == 1)
+          dk = 0;
+        else
+          dk = 1;
     }
 }
 
@@ -78,7 +124,7 @@ void SimpleSelectSort(int A[], int n){
                 key = j;
         }
         if(key != i){
-            swap(&A[key], &A[i]); //最小元素与第i位置元素互换
+            Swap(&A[key], &A[i]); //最小元素与第i位置元素互换
         }
     }
 }
@@ -104,12 +150,10 @@ void DualisticSelectSort(int A[],int n) {
             }
       }
       //该交换操作还可分情况讨论以提高效率
-      swap(&A[i-1], &A[min]);
-      swap(&A[n-i], &A[max]);
+      Swap(&A[i-1], &A[min]);
+      Swap(&A[n-i], &A[max]);
     }
 }
-
-
 
 /*
  选择排序—堆排序（Heap Sort）
@@ -171,7 +215,7 @@ void HeapSort(int A[],int n)
     for (int i = n - 1; i > 0; --i)
     {
         //交换堆顶元素H[0]和堆中最后一个元素
-        swap(&A[i], &A[0]);
+        Swap(&A[i], &A[0]);
         //每次交换堆顶元素和堆中最后一个元素之后，都要对堆进行调整
         HeapAdjust(A,0,i);
   }
@@ -189,7 +233,7 @@ void BubbleSort(int A[], int n){
         for(int j = 0; j < n-i-1; ++j) {
             if(A[j] > A[j+1])
             {
-                swap(&A[j], &A[j+1]); //swap
+                Swap(&A[j], &A[j+1]); //Swap
             }
         }
     }
@@ -207,7 +251,7 @@ void BubbleSort_1 ( int A[], int n) {
         for (int j= 0; j< i; j++)
             if (A[j]> A[j+1]) {
                 pos= j; //记录交换的位置
-                swap(&A[j], &A[j+1]); //swap
+                Swap(&A[j], &A[j+1]); //Swap
             }
         i= pos; //为下一趟排序作准备
      }
@@ -224,13 +268,13 @@ void BubbleSort_2 ( int A[], int n){
     while (low < high) {
         for (j= low; j< high; ++j){  //正向冒泡,找到最大者
             if (A[j]> A[j+1]) {
-                swap(&A[j], &A[j+1]); //swap
+                Swap(&A[j], &A[j+1]); //Swap
             }
         }
         --high;                 //修改high值, 前移一位
         for ( j=high; j>low; --j){  //反向冒泡,找到最小者
             if (A[j]<A[j-1]) {
-                swap(&A[j], &A[j-1]); //swap
+                Swap(&A[j], &A[j-1]); //Swap
             }
         }
         ++low;                  //修改low值,后移一位
@@ -248,7 +292,7 @@ void BubbleSort_3 ( int A[], int n){
         for (j= low; j< high; ++j) {//正向冒泡,找到最大者
             if (A[j]> A[j+1]) {
                 pos1 = j;
-                swap(&A[j], &A[j+1]); //swap
+                Swap(&A[j], &A[j+1]); //Swap
             }
         }
         high = pos1; //修改high值, 前移
@@ -256,7 +300,7 @@ void BubbleSort_3 ( int A[], int n){
         for ( j=high; j>low; --j) {//反向冒泡,找到最小者
             if (A[j]<A[j-1]) {
                 pos2 = j;
-                swap(&A[j], &A[j-1]); //swap
+                Swap(&A[j], &A[j-1]); //Swap
             }
         }
         low=pos2;   //修改low值,后移
@@ -272,7 +316,7 @@ void BubbleSort_3 ( int A[], int n){
 */
 
 void QuickSort(int A[], int n) {
-  if (len < 2) return;
+  if (n < 2) return;
 
   int pivot = A[n / 2]; //选择一个基准元素
 
@@ -284,17 +328,86 @@ void QuickSort(int A[], int n) {
 
     if (i >= j) break;
 
-    swap(&A[i], &A[j]);
+    Swap(&A[i], &A[j]);
   }
 
   QuickSort(A, i); //一部分记录的元素值均比基准元素值小
-  QuickSort(A + i, len - i); //一部分记录的元素值比基准值大
+  QuickSort(A + i, n - i); //一部分记录的元素值比基准值大
 }
 
+
 int main(){
-    int a[20] = {20,13,14,3,1,5,7,15,16,17,2,4,18,9,6,19,10,8, 12, 11};
-    print(a,20);
-    QuickSort(a,20);
-    print(a,20);
+    long t1,t2;
+//    int A[20] = {20,13,14,3,1,5,7,15,16,17,2,4,18,9,6,19,10,8, 12, 11};
+    int A[100];
+    ProduceRandArray(A, 100);
+    t1 = GetCurrentTime(3);
+    QuickSort(A,100);
+    t2 = GetCurrentTime(3);
+    printf("QuickSort cost time %ld microsecond\n", t2 - t1);
+    Display(A,100);
+
+    ProduceRandArray(A, 100);
+    t1 = GetCurrentTime(3);
+    BubbleSort_3(A,100);
+    t2 = GetCurrentTime(3);
+    printf("BubbleSort_3 cost time %ld microsecond\n", t2 - t1);
+    Display(A,100);
+
+    ProduceRandArray(A, 100);
+    t1 = GetCurrentTime(3);
+    BubbleSort_2(A,100);
+    t2 = GetCurrentTime(3);
+    printf("BubbleSort_2 cost time %ld microsecond\n", t2 - t1);
+    Display(A,100);
+
+    ProduceRandArray(A, 100);
+    t1 = GetCurrentTime(3);
+    BubbleSort_1(A,100);
+    t2 = GetCurrentTime(3);
+    printf("BubbleSort_1 cost time %ld microsecond\n", t2 - t1);
+    Display(A,100);
+
+    ProduceRandArray(A, 100);
+    t1 = GetCurrentTime(3);
+    BubbleSort(A,100);
+    t2 = GetCurrentTime(3);
+    printf("BubbleSort cost time %ld microsecond\n", t2 - t1);
+    Display(A,100);
+
+    ProduceRandArray(A, 100);
+    t1 = GetCurrentTime(3);
+    HeapSort(A,100);
+    t2 = GetCurrentTime(3);
+    printf("HeapSort cost time %ld microsecond\n", t2 - t1);
+    Display(A,100);
+
+    ProduceRandArray(A, 100);
+    t1 = GetCurrentTime(3);
+    DualisticSelectSort(A,100);
+    t2 = GetCurrentTime(3);
+    printf("DualisticSelectSort cost time %ld microsecond\n", t2 - t1);
+    Display(A,100);
+
+    ProduceRandArray(A, 100);
+    t1 = GetCurrentTime(3);
+    SimpleSelectSort(A,100);
+    t2 = GetCurrentTime(3);
+    printf("SimpleSelectSort cost time %ld microsecond\n", t2 - t1);
+    Display(A,100);
+
+    ProduceRandArray(A, 100);
+    t1 = GetCurrentTime(3);
+    ShellSort(A,100);
+    t2 = GetCurrentTime(3);
+    printf("ShellSort cost time %ld microsecond\n", t2 - t1);
+    Display(A,100);
+
+    ProduceRandArray(A, 100);
+    t1 = GetCurrentTime(3);
+    StraightInsertSort(A,100);
+    t2 = GetCurrentTime(3);
+    printf("StraightInsertSort cost time %ld microsecond\n", t2 - t1);
+    Display(A,100);
 }
 
