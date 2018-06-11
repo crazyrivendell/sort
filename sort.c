@@ -6,7 +6,7 @@
 
 
 #define RANGE 100000   //数组的元素大小从1到RAGNE
-#define LENGTH 1000
+#define LENGTH 10000
 
 
 void Display(int a[], int n){
@@ -345,70 +345,70 @@ int main(){
     t1 = GetCurrentTime(3);
     QuickSort(A,LENGTH);
     t2 = GetCurrentTime(3);
-    printf("QuickSort cost time %ld microsecond\n", t2 - t1);
-    Display(A,LENGTH);
-
-    ProduceRandArray(A, LENGTH);
-    t1 = GetCurrentTime(3);
-    BubbleSort_3(A,LENGTH);
-    t2 = GetCurrentTime(3);
-    printf("BubbleSort_3 cost time %ld microsecond\n", t2 - t1);
-    Display(A,LENGTH);
-
-    ProduceRandArray(A, LENGTH);
-    t1 = GetCurrentTime(3);
-    BubbleSort_2(A,LENGTH);
-    t2 = GetCurrentTime(3);
-    printf("BubbleSort_2 cost time %ld microsecond\n", t2 - t1);
-    Display(A,LENGTH);
-
-    ProduceRandArray(A, LENGTH);
-    t1 = GetCurrentTime(3);
-    BubbleSort_1(A,LENGTH);
-    t2 = GetCurrentTime(3);
-    printf("BubbleSort_1 cost time %ld microsecond\n", t2 - t1);
-    Display(A,LENGTH);
-
-    ProduceRandArray(A, LENGTH);
-    t1 = GetCurrentTime(3);
-    BubbleSort(A,LENGTH);
-    t2 = GetCurrentTime(3);
-    printf("BubbleSort cost time %ld microsecond\n", t2 - t1);
+    printf("Swap Sort--------QuickSort-----------cost time %8ld microsecond\n", t2 - t1);
     Display(A,LENGTH);
 
     ProduceRandArray(A, LENGTH);
     t1 = GetCurrentTime(3);
     HeapSort(A,LENGTH);
     t2 = GetCurrentTime(3);
-    printf("HeapSort cost time %ld microsecond\n", t2 - t1);
-    Display(A,LENGTH);
-
-    ProduceRandArray(A, LENGTH);
-    t1 = GetCurrentTime(3);
-    DualisticSelectSort(A,LENGTH);
-    t2 = GetCurrentTime(3);
-    printf("DualisticSelectSort cost time %ld microsecond\n", t2 - t1);
-    Display(A,LENGTH);
-
-    ProduceRandArray(A, LENGTH);
-    t1 = GetCurrentTime(3);
-    SimpleSelectSort(A,LENGTH);
-    t2 = GetCurrentTime(3);
-    printf("SimpleSelectSort cost time %ld microsecond\n", t2 - t1);
+    printf("Selection Sort---HeapSort------------cost time %8ld microsecond\n", t2 - t1);
     Display(A,LENGTH);
 
     ProduceRandArray(A, LENGTH);
     t1 = GetCurrentTime(3);
     ShellSort(A,LENGTH);
     t2 = GetCurrentTime(3);
-    printf("ShellSort cost time %ld microsecond\n", t2 - t1);
+    printf("Insertion Sort---ShellSort-----------cost time %8ld microsecond\n", t2 - t1);
     Display(A,LENGTH);
 
     ProduceRandArray(A, LENGTH);
     t1 = GetCurrentTime(3);
     StraightInsertSort(A,LENGTH);
     t2 = GetCurrentTime(3);
-    printf("StraightInsertSort cost time %ld microsecond\n", t2 - t1);
+    printf("Insertion Sort---StraightInsertSort--cost time %8ld microsecond\n", t2 - t1);
+    Display(A,LENGTH);
+
+    ProduceRandArray(A, LENGTH);
+    t1 = GetCurrentTime(3);
+    DualisticSelectSort(A,LENGTH);
+    t2 = GetCurrentTime(3);
+    printf("Selection Sort---DualisticSelectSort-cost time %8ld microsecond\n", t2 - t1);
+    Display(A,LENGTH);
+
+    ProduceRandArray(A, LENGTH);
+    t1 = GetCurrentTime(3);
+    SimpleSelectSort(A,LENGTH);
+    t2 = GetCurrentTime(3);
+    printf("Selection Sort---SimpleSelectSort----cost time %8ld microsecond\n", t2 - t1);
+    Display(A,LENGTH);
+
+    ProduceRandArray(A, LENGTH);
+    t1 = GetCurrentTime(3);
+    BubbleSort_3(A,LENGTH);
+    t2 = GetCurrentTime(3);
+    printf("Swap Sort--------BubbleSort_3--------cost time %8ld microsecond\n", t2 - t1);
+    Display(A,LENGTH);
+
+    ProduceRandArray(A, LENGTH);
+    t1 = GetCurrentTime(3);
+    BubbleSort_2(A,LENGTH);
+    t2 = GetCurrentTime(3);
+    printf("Swap Sort--------BubbleSort_2--------cost time %8ld microsecond\n", t2 - t1);
+    Display(A,LENGTH);
+
+    ProduceRandArray(A, LENGTH);
+    t1 = GetCurrentTime(3);
+    BubbleSort_1(A,LENGTH);
+    t2 = GetCurrentTime(3);
+    printf("Swap Sort--------BubbleSort_1--------cost time %8ld microsecond\n", t2 - t1);
+    Display(A,LENGTH);
+
+    ProduceRandArray(A, LENGTH);
+    t1 = GetCurrentTime(3);
+    BubbleSort(A,LENGTH);
+    t2 = GetCurrentTime(3);
+    printf("Swap Sort--------BubbleSort----------cost time %8ld microsecond\n", t2 - t1);
     Display(A,LENGTH);
 }
 
